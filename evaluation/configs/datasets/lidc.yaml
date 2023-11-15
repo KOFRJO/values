@@ -1,0 +1,33 @@
+#@package _global_
+LIDC:
+  iter_params:
+    shift: [ "texture", "malignancy" ]
+    pred_model: [ "Softmax", "Dropout", "Ensemble", "TTA", "SSN" ]
+    seed: [ "123", "124", "125" ]
+  fold: 0
+  rank: 5
+  image_ending: ".nii.gz"
+  unc_ending: ".nii.gz"
+  n_reference_segs: 4
+
+  prediction_models:
+    Softmax:
+      naming_scheme_version: "{shift}_fold{fold}_seed{seed}"
+      unc_types: [ "predictive_uncertainty" ]
+      aggregations: [ "patch_level", "threshold" ]
+    Dropout:
+      naming_scheme_version: "{shift}_fold{fold}_seed{seed}"
+      unc_types: [ "predictive_uncertainty", "aleatoric_uncertainty", "epistemic_uncertainty" ]
+      aggregations: [ "patch_level", "threshold" ]
+    Ensemble:
+      naming_scheme_version: "{shift}_fold{fold}_seed{seed}"
+      unc_types: [ "predictive_uncertainty", "aleatoric_uncertainty", "epistemic_uncertainty" ]
+      aggregations: [ "patch_level", "threshold" ]
+    TTA:
+      naming_scheme_version: "{shift}_fold{fold}_seed{seed}"
+      unc_types: [ "predictive_uncertainty", "aleatoric_uncertainty", "epistemic_uncertainty" ]
+      aggregations: [ "patch_level", "threshold" ]
+    SSN:
+      naming_scheme_version: "{shift}_fold{fold}_rank{rank}_seed{seed}"
+      unc_types: [ "predictive_uncertainty", "aleatoric_uncertainty", "epistemic_uncertainty" ]
+      aggregations: [ "patch_level", "threshold" ]

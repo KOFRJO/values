@@ -1,0 +1,11 @@
+_target_: uncertainty_modeling.data.torch_dataloader.BaseDataModule   # Base Data Module
+num_classes: 24
+ignore_index: 255
+num_workers: 10
+batch_size: 6
+val_batch_size: 6
+data_fold_id: 0
+augmentations: ${AUGMENTATIONS}
+dataset:
+  _target_: uncertainty_modeling.data.cityscapes_dataset.Cityscapes_dataset
+  splits_path: "/nvme/GTA/splits/firstCycle/splits.pkl"

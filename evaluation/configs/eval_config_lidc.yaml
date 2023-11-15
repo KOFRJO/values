@@ -1,0 +1,50 @@
+#@package _global_
+defaults:
+  - _self_
+  - datasets/lidc
+  - tasks/threshold
+  - tasks/aggregation_patch_thresh
+  - tasks/failure_detection
+
+base_path: "/home/${oc.env:USER}/LIDC-IDRI/ActiveLearning/FirstCycle"
+second_cycle_path: "/home/${oc.env:USER}/LIDC-IDRI/ActiveLearning/SecondCycle"
+experiments:
+  - ${LIDC}
+
+tasks: ["al_improvement"]
+
+task_params:
+  threshold:
+    - ${QUANTILE}
+    - ${THRESHOLD}
+  aggregation: ${AGG_PATCH_THRESH}
+  second_cycle_splits:
+    datasets: ["unlabeled"]
+    function:
+      _target_: evaluation.split_file_generation.split_files_second_cycle.generate_split_file
+      base_splits_path: "/home/${oc.env:USER}/LIDC-IDRI/CroppedData/splits"
+  second_cycle_splits_random:
+    datasets: [ "unlabeled" ]
+    function:
+      _target_: evaluation.split_file_generation.split_files_second_cycle_random.generate_split_file
+      base_splits_path: "/home/${oc.env:USER}/LIDC-IDRI/CroppedData/splits"
+      random_types: ["random", "best", "worst"]
+  ood_detection:
+    datasets: ["unlabeled"]
+    function:
+      _target_: evaluation.metrics.auroc.ood_detection
+      base_splits_path: "/home/${oc.env:USER}/LIDC-IDRI/CroppedData/splits"
+  failure_detection: ${FAILURE_DETECTION}
+  calibration:
+    datasets: [ "id", "ood" ]
+    function:
+      _target_: evaluation.metrics.ace.main
+  ambiguity_modeling:
+    datasets: [ "id", "ood" ]
+    function:
+      _target_: evaluation.metrics.ncc.main
+  al_improvement:
+    datasets: ["ood"]
+    function:
+      _target_: evaluation.metrics.al_improvement.main
+

@@ -1,0 +1,23 @@
+defaults:
+  - _self_
+  - datasets/toy
+  - datasets/toy_seed123
+  - tasks/threshold
+  - tasks/aggregation_patch_thresh
+
+base_path: "/home/${oc.env:USER}/Uncertainty/ToyExperimentOOD/AleatoricTrain"
+experiments:
+  - ${TOY}
+  - ${TOY_SEED123}
+
+tasks: ["ood_detection"]
+
+task_params:
+  threshold:
+  - ${QUANTILE}
+  - ${THRESHOLD}
+  aggregation: ${AGG_PATCH_THRESH}
+  ood_detection:
+    datasets: [ "ood" ]
+    function:
+      _target_: evaluation.metrics.auroc.ood_detection
